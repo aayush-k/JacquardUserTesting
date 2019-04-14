@@ -20,6 +20,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var showTutorialButton: UIButton!
     @IBOutlet var threads:[UIImageView]!
     @IBOutlet weak var gesturePrompt: UILabel!
+    
+    
 
     // CSV Logging Constants
     private let fileName = "data.csv"
@@ -27,6 +29,8 @@ class ViewController: UIViewController {
     private let gestureSequence = ["Scratch", "Cover", "Force Touch", "Force Touch", "Cover", "Brush In", "Double Tap", "Scratch", "Brush In", "Brush Out","Scratch", "Double Tap"]
     private var gestureIndex = 0
     private var gestureErrors = 0
+    
+    private let playerController = AVPlayerViewController()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +44,10 @@ class ViewController: UIViewController {
     public func updateUI(isConnected: Bool) {
         loggingButton.isEnabled = isConnected
         loggingButton.alpha = CGFloat(isConnected ? 1 : 0.7)
+        showTutorialButton.isEnabled = isConnected
+        showTutorialButton.alpha = CGFloat(isConnected ? 1 : 0.7)
         gesturePrompt.adjustsFontSizeToFitWidth = true
-        gesturePrompt.text = gestureSequence[gestureIndex]
+        gesturePrompt.text = "(\(gestureIndex + 1)/\(gestureSequence.count)): \(gestureSequence[gestureIndex])"
     }
     
     @IBAction func connectButtonTapped(_ sender: Any) {
@@ -65,11 +71,25 @@ class ViewController: UIViewController {
             return
         }
         let player = AVPlayer(url: URL(fileURLWithPath: path))
-        let playerController = AVPlayerViewController()
+        let forceTouchDirections = UILabel(frame: CGRect(x: 0, y: 40, width: playerController.view.frame.size.width, height: 50))
+        
         playerController.player = player
+        playerController.showsPlaybackControls = false
+        forceTouchDirections.text = "Force Touch: Try It Now!"
+        forceTouchDirections.textColor = .white
+        forceTouchDirections.textAlignment = .center
+        playerController.contentOverlayView?.addSubview(forceTouchDirections)
+        
         present(playerController, animated: true) {
             player.play()
+            // looping until forcetouch gesture delegate dismisses video tutorial (see didDetectForceTouchGesture() delegate method)
+            NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { notification in
+                player.seek(to: CMTime.zero)
+                player.play()
+            }
         }
+        
+        
     }
     
     public func advanceGesturePrompt() {
@@ -77,7 +97,7 @@ class ViewController: UIViewController {
         gestureErrors = 0
         gestureIndex += 1
         if gestureIndex < gestureSequence.count {
-            gesturePrompt.text = gestureSequence[gestureIndex]
+            gesturePrompt.text = "(\(gestureIndex + 1)/\(gestureSequence.count)): \(gestureSequence[gestureIndex])"
         } else {
             self.emailCSV(csvText: gestureCSVText, emailSubject: "Gestures Intended vs Detected")
             gesturePrompt.text = "Done"
@@ -87,7 +107,7 @@ class ViewController: UIViewController {
     }
     
     public func gestureInputCheck(gestureName: String) {
-        if gestureIndex >= gestureSequence.count {
+        if playerController.isFirstResponder || gestureIndex >= gestureSequence.count {
             return
         }
         gestureCSVText.append("\(gestureSequence[gestureIndex]),\(gestureName)\n")
@@ -154,6 +174,11 @@ extension ViewController: JacquardServiceDelegate {
         print("Force Touch")
         lastGestureLabel.text = "Force Touch"
         gestureInputCheck(gestureName: "Force Touch")
+        
+        if playerController.isFirstResponder {
+            print("trying to dismiss play controller")
+            playerController.dismiss(animated: true, completion: nil)
+        }
     }
     
 }
