@@ -18,12 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="RedCircle" translatesAutoresizingMaskIntoConstraints="NO" id="bIy-It-VkS">
-                                <rect key="frame" x="313" y="37" width="46" height="46"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vDg-sb-KPw">
-                                <rect key="frame" x="16" y="585" width="343" height="62"/>
+                                <rect key="frame" x="16" y="704" width="343" height="62"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.41568627450000001" green="0.80000000000000004" blue="0.047058823530000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Connect">
@@ -34,88 +30,77 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Last Gesture Detected..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="goI-Jk-VGT">
-                                <rect key="frame" x="16" y="323" width="187" height="21"/>
+                                <rect key="frame" x="16" y="563" width="187" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s7u-u3-kgS">
-                                <rect key="frame" x="91" y="352" width="193" height="48"/>
+                                <rect key="frame" x="90" y="592" width="193" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="29"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HMb-MV-zsI">
-                                <rect key="frame" x="16" y="503" width="343" height="62"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.9992151856" green="0.15658691529999999" blue="0.32633703949999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Toggle Rainbow Glow">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <action selector="glowButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eQu-ZI-tb1"/>
-                                </connections>
-                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="RHM-HZ-JCn" userLabel="Thread1">
-                                <rect key="frame" x="16" y="113" width="343" height="7"/>
+                                <rect key="frame" x="16" y="391" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="0JA-hX-zuw" userLabel="Thread2">
-                                <rect key="frame" x="16" y="122" width="343" height="7"/>
+                                <rect key="frame" x="16" y="400" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="xOB-vQ-hIu" userLabel="Thread3">
-                                <rect key="frame" x="16" y="131" width="343" height="7"/>
+                                <rect key="frame" x="16" y="409" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="yo1-Hv-jJr" userLabel="Thread4">
-                                <rect key="frame" x="16" y="140" width="343" height="7"/>
+                                <rect key="frame" x="16" y="418" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="ttt-VS-Xft" userLabel="Thread5">
-                                <rect key="frame" x="16" y="149" width="343" height="7"/>
+                                <rect key="frame" x="16" y="427" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="cBu-Fz-Hj8" userLabel="Thread6">
-                                <rect key="frame" x="16" y="158" width="343" height="7"/>
+                                <rect key="frame" x="16" y="436" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="eTK-ki-jEP" userLabel="Thread7">
-                                <rect key="frame" x="16" y="167" width="343" height="7"/>
+                                <rect key="frame" x="16" y="445" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="vWb-DC-9tt" userLabel="Thread8">
-                                <rect key="frame" x="16" y="176" width="343" height="7"/>
+                                <rect key="frame" x="16" y="454" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="gaA-Mf-qqw" userLabel="Thread10">
-                                <rect key="frame" x="16" y="194" width="343" height="7"/>
+                                <rect key="frame" x="16" y="472" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="mP9-mZ-410" userLabel="Thread11">
-                                <rect key="frame" x="16" y="203" width="343" height="7"/>
+                                <rect key="frame" x="16" y="481" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="ew4-3d-Kl9" userLabel="Thread12">
-                                <rect key="frame" x="16" y="212" width="343" height="7"/>
+                                <rect key="frame" x="16" y="490" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="KQ8-61-D9N" userLabel="Thread13">
-                                <rect key="frame" x="16" y="221" width="343" height="7"/>
+                                <rect key="frame" x="16" y="499" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="cWw-ch-fYY" userLabel="Thread14">
-                                <rect key="frame" x="16" y="230" width="343" height="7"/>
+                                <rect key="frame" x="16" y="508" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="THe-Ew-1dj" userLabel="Thread15">
-                                <rect key="frame" x="16" y="239" width="343" height="7"/>
+                                <rect key="frame" x="16" y="517" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Thread" translatesAutoresizingMaskIntoConstraints="NO" id="Gcf-EK-h7e" userLabel="Thread9">
-                                <rect key="frame" x="16" y="185" width="343" height="7"/>
+                                <rect key="frame" x="16" y="463" width="343" height="7"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g11-7D-kIR">
@@ -126,15 +111,37 @@
                                     <action selector="loggingButtonToggled:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9Jb-qk-vgk"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rby-6B-K51" userLabel="Show Tutorial">
+                                <rect key="frame" x="266" y="44" width="93" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Show Tutorial"/>
+                                <connections>
+                                    <action selector="showTutorial:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GhA-Av-qAP"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R0W-x5-LJ2">
+                                <rect key="frame" x="72" y="184" width="230" height="62"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Do the following gesture:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ga-Qj-V7k">
+                                <rect key="frame" x="16" y="155" width="191" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="connectionIndicator" destination="bIy-It-VkS" id="shk-in-7Gi"/>
+                        <outlet property="gesturePrompt" destination="R0W-x5-LJ2" id="OGB-vp-peS"/>
                         <outlet property="lastGestureLabel" destination="s7u-u3-kgS" id="eEM-To-pkO"/>
                         <outlet property="loggingButton" destination="g11-7D-kIR" id="hPJ-nF-tIw"/>
-                        <outlet property="rainbowGlowButton" destination="HMb-MV-zsI" id="Pgb-iZ-ch9"/>
+                        <outlet property="showTutorialButton" destination="Rby-6B-K51" id="hAD-Q8-Bkb"/>
                         <outletCollection property="threads" destination="RHM-HZ-JCn" collectionClass="NSMutableArray" id="rh9-Eq-dcw"/>
                         <outletCollection property="threads" destination="0JA-hX-zuw" collectionClass="NSMutableArray" id="OEq-Ya-lUX"/>
                         <outletCollection property="threads" destination="xOB-vQ-hIu" collectionClass="NSMutableArray" id="CAA-0z-F0n"/>
@@ -154,11 +161,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+            <point key="canvasLocation" x="136.80000000000001" y="133.00492610837438"/>
         </scene>
     </scenes>
     <resources>
-        <image name="RedCircle" width="1002" height="1002"/>
         <image name="Thread" width="938" height="15"/>
     </resources>
 </document>
