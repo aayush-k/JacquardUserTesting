@@ -20,15 +20,19 @@ class ViewController: UIViewController {
     @IBOutlet weak var showTutorialButton: UIButton!
     @IBOutlet var threads:[UIImageView]!
     @IBOutlet weak var gesturePrompt: UILabel!
-    
+    @IBOutlet weak var startTestAButton: UIButton!
+    @IBOutlet weak var startTestBButton: UIButton!
+    @IBOutlet weak var gesturePromptDirectionsLabel: UILabel!
     
 
     // CSV Logging Constants
     private let fileName = "data.csv"
     private var gestureCSVText = ""
-    private let gestureSequence = ["Scratch", "Cover", "Force Touch", "Force Touch", "Cover", "Brush In", "Double Tap", "Scratch", "Brush In", "Brush Out","Scratch", "Double Tap"]
+    private var gestureSequence = [""]
     private var gestureIndex = 0
     private var gestureErrors = 0
+    private var testStarted = false
+    private var testType = ""
     
     private let playerController = AVPlayerViewController()
 
@@ -42,6 +46,16 @@ class ViewController: UIViewController {
     }
     
     public func updateUI(isConnected: Bool) {
+        gesturePrompt.isHidden = !testStarted
+        gesturePromptDirectionsLabel.isHidden = !testStarted
+        startTestAButton.isHidden = testStarted
+        startTestBButton.isHidden = testStarted
+        
+        startTestAButton.isEnabled = isConnected
+        startTestBButton.alpha = CGFloat(isConnected ? 1 : 0.4)
+        startTestBButton.isEnabled = isConnected
+        startTestAButton.alpha = CGFloat(isConnected ? 1 : 0.4)
+        
         loggingButton.isEnabled = isConnected
         loggingButton.alpha = CGFloat(isConnected ? 1 : 0.7)
         showTutorialButton.isEnabled = isConnected
@@ -64,6 +78,22 @@ class ViewController: UIViewController {
         loggingButton.setTitle(JacquardService.shared.loggingThreads ? "Start Logging" : "Stop Logging", for: UIControl.State.normal)
         JacquardService.shared.loggingThreads = !JacquardService.shared.loggingThreads
     }
+    
+    @IBAction func startTestATapped(_ sender: Any) {
+        testStarted = true
+        testType = "A"
+        gestureSequence = ["Scratch"]
+            // ["Scratch", "Cover", "Force Touch", "Force Touch", "Cover", "Brush In", "Double Tap", "Scratch", "Brush In", "Brush Out","Scratch", "Double Tap"]
+        updateUI(isConnected: true)
+    }
+    
+    @IBAction func startTestBTapped(_ sender: Any) {
+        testStarted = true
+        testType = "B"
+        gestureSequence = ["Brush In","Brush In","Brush In", "Scratch","Scratch","Scratch","Brush Out","Brush Out","Brush Out","Cover","Cover","Cover","Force Touch","Force Touch","Force Touch","Double Tap","Double Tap","Double Tap"]
+        updateUI(isConnected: true)
+    }
+    
     
     @IBAction func showTutorial(_ sender: Any) {
         guard let path = Bundle.main.path(forResource: "forceTouch2", ofType:"mp4") else {
@@ -99,15 +129,20 @@ class ViewController: UIViewController {
         if gestureIndex < gestureSequence.count {
             gesturePrompt.text = "(\(gestureIndex + 1)/\(gestureSequence.count)): \(gestureSequence[gestureIndex])"
         } else {
-            self.emailCSV(csvText: gestureCSVText, emailSubject: "Gestures Intended vs Detected")
-            gesturePrompt.text = "Done"
+            self.emailCSV(csvText: gestureCSVText, emailSubject: "Gestures Intended vs Detected: \(testType)")
+            gestureCSVText = ""
+            gestureIndex = 0
+            gestureErrors = 0
+            testStarted = false
+            testType = ""
+            updateUI(isConnected: true)
         }
         
 
     }
     
     public func gestureInputCheck(gestureName: String) {
-        if playerController.isFirstResponder || gestureIndex >= gestureSequence.count {
+        if !testStarted || playerController.isFirstResponder || gestureIndex >= gestureSequence.count {
             return
         }
         gestureCSVText.append("\(gestureSequence[gestureIndex]),\(gestureName)\n")
@@ -176,7 +211,7 @@ extension ViewController: JacquardServiceDelegate {
         gestureInputCheck(gestureName: "Force Touch")
         
         if playerController.isFirstResponder {
-            print("trying to dismiss play controller")
+            print("Dismissing AV Controller")
             playerController.dismiss(animated: true, completion: nil)
         }
     }

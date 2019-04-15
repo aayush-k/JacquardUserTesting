@@ -29,6 +29,17 @@
                                     <action selector="connectButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Pg0-2D-ixj"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4qD-xD-3E0">
+                                <rect key="frame" x="16" y="144" width="163" height="62"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Start Test A">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="startTestATapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ayb-ft-JU5"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Last Gesture Detected..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="goI-Jk-VGT">
                                 <rect key="frame" x="16" y="563" width="187" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -133,15 +144,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="faC-q9-0Qk">
+                                <rect key="frame" x="194" y="144" width="165" height="62"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Start Test B">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="startTestBTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5gk-Aa-aT8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="gesturePrompt" destination="R0W-x5-LJ2" id="OGB-vp-peS"/>
+                        <outlet property="gesturePromptDirectionsLabel" destination="2Ga-Qj-V7k" id="t8r-OF-h2Q"/>
                         <outlet property="lastGestureLabel" destination="s7u-u3-kgS" id="eEM-To-pkO"/>
                         <outlet property="loggingButton" destination="g11-7D-kIR" id="hPJ-nF-tIw"/>
                         <outlet property="showTutorialButton" destination="Rby-6B-K51" id="hAD-Q8-Bkb"/>
+                        <outlet property="startTestAButton" destination="4qD-xD-3E0" id="CCq-QD-Bkf"/>
+                        <outlet property="startTestBButton" destination="faC-q9-0Qk" id="G2e-1B-CmW"/>
                         <outletCollection property="threads" destination="RHM-HZ-JCn" collectionClass="NSMutableArray" id="rh9-Eq-dcw"/>
                         <outletCollection property="threads" destination="0JA-hX-zuw" collectionClass="NSMutableArray" id="OEq-Ya-lUX"/>
                         <outletCollection property="threads" destination="xOB-vQ-hIu" collectionClass="NSMutableArray" id="CAA-0z-F0n"/>
