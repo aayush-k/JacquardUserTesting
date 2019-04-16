@@ -34,7 +34,9 @@ class ViewController: UIViewController {
     private var testStarted = false
     private var testType = ""
     
+    // video tutorial vars
     private let playerController = AVPlayerViewController()
+    private var teachingGesture = ""
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -96,30 +98,35 @@ class ViewController: UIViewController {
     
     
     @IBAction func showTutorial(_ sender: Any) {
-        guard let path = Bundle.main.path(forResource: "forceTouch2", ofType:"mp4") else {
-            debugPrint("forceTouch2.mp4 not found")
+        showTutorialHelper(gestureName: "Force Touch", gestureFileVideo: "forceTouch2")
+    }
+    
+    public func showTutorialHelper(gestureName: String, gestureFileVideo: String) {
+        teachingGesture = gestureName
+        guard let path = Bundle.main.path(forResource: gestureFileVideo, ofType:"mp4") else {
+            debugPrint("\(gestureFileVideo).mp4 not found")
             return
         }
         let player = AVPlayer(url: URL(fileURLWithPath: path))
-        let forceTouchDirections = UILabel(frame: CGRect(x: 0, y: 40, width: playerController.view.frame.size.width, height: 50))
+        let gestureDirections = UILabel(frame: CGRect(x: 0, y: 40, width: playerController.view.frame.size.width, height: 50))
         
         playerController.player = player
         playerController.showsPlaybackControls = false
-        forceTouchDirections.text = "Force Touch: Try It Now!"
-        forceTouchDirections.textColor = .white
-        forceTouchDirections.textAlignment = .center
-        playerController.contentOverlayView?.addSubview(forceTouchDirections)
+        gestureDirections.text = "\(gestureName): Try It Now!"
+        gestureDirections.textColor = .white
+        gestureDirections.textAlignment = .center
+        
+        playerController.contentOverlayView?.subviews.forEach { $0.removeFromSuperview() }
+        playerController.contentOverlayView?.addSubview(gestureDirections)
         
         present(playerController, animated: true) {
             player.play()
-            // looping until forcetouch gesture delegate dismisses video tutorial (see didDetectForceTouchGesture() delegate method)
+            // looping until forcetouch gesture delegate dismisses video tutorial
             NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { notification in
                 player.seek(to: CMTime.zero)
                 player.play()
             }
         }
-        
-        
     }
     
     public func advanceGesturePrompt() {
@@ -197,6 +204,11 @@ extension ViewController: JacquardServiceDelegate {
         print("Scratch")
         lastGestureLabel.text = "Scratch"
         gestureInputCheck(gestureName: "Scratch")
+        
+        if playerController.isFirstResponder && teachingGesture == "Scratch" {
+            print("Dismissing AV Controller")
+            playerController.dismiss(animated: true, completion: nil)
+        }
     }
     
     func didDetectThreadTouch(threadArray: [Float]) {
@@ -210,9 +222,10 @@ extension ViewController: JacquardServiceDelegate {
         lastGestureLabel.text = "Force Touch"
         gestureInputCheck(gestureName: "Force Touch")
         
-        if playerController.isFirstResponder {
+        if playerController.isFirstResponder && teachingGesture == "Force Touch" {
             print("Dismissing AV Controller")
             playerController.dismiss(animated: true, completion: nil)
+            showTutorialHelper(gestureName: "Scratch", gestureFileVideo: "scratch")
         }
     }
     
