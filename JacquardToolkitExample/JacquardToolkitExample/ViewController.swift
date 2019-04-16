@@ -13,30 +13,36 @@ import AVKit
 import AVFoundation
 
 class ViewController: UIViewController {
+    
     // UI Outlets
     @IBOutlet weak var connectionIndicator: UIImageView!
     @IBOutlet weak var lastGestureLabel: UILabel!
     @IBOutlet weak var loggingButton: UIButton!
     @IBOutlet weak var showTutorialButton: UIButton!
     @IBOutlet var threads:[UIImageView]!
-    @IBOutlet weak var gesturePrompt: UILabel!
-    @IBOutlet weak var startTestAButton: UIButton!
-    @IBOutlet weak var startTestBButton: UIButton!
-    @IBOutlet weak var gesturePromptDirectionsLabel: UILabel!
+    @IBOutlet weak var gestureTestPrompt: UILabel!
+    @IBOutlet weak var startGestureTestButton_A: UIButton!
+    @IBOutlet weak var startGestureTestButton_B: UIButton!
+    @IBOutlet weak var gestureTestPromptDirectionsLabel: UILabel!
     
-
-    // CSV Logging Constants
+    // gesture test vars
     private let fileName = "data.csv"
-    private var gestureCSVText = ""
-    private var gestureSequence = [""]
-    private var gestureIndex = 0
-    private var gestureErrors = 0
-    private var testStarted = false
-    private var testType = ""
+    private var gestureTestCSVText = ""
+    private var gestureTestSequence = [""]
+    private var gestureTestIndex = 0
+    private var gestureTestMismatchErrors = 0
+    private let gestureTestMismatchLimit = 5
+    private var hasGestureTestStarted = false
+    private var gestureTestType = ""
     
-    // video tutorial vars
-    private let playerController = AVPlayerViewController()
-    private var teachingGesture = ""
+    // gesture tutorial vars
+    private let tutorialPlayerController = AVPlayerViewController()
+    private var currentGestureInTutorial = ""
+    private var tutorialGestureRepeatCounter = 0
+    private var tutorialSequenceIndex = 0
+    private let tutorialGestureRepeats = 3
+    private let tutorialNameSequence = ["Force Touch", "Scratch"]
+    private let tutorialFileSequence = ["forceTouch2", "scratch"]
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -48,22 +54,28 @@ class ViewController: UIViewController {
     }
     
     public func updateUI(isConnected: Bool) {
-        gesturePrompt.isHidden = !testStarted
-        gesturePromptDirectionsLabel.isHidden = !testStarted
-        startTestAButton.isHidden = testStarted
-        startTestBButton.isHidden = testStarted
+        // Test UI: Gesture Prompt
+        gestureTestPrompt.adjustsFontSizeToFitWidth = true
+        gestureTestPrompt.text = "(\(gestureTestIndex + 1)/\(gestureTestSequence.count)): \(gestureTestSequence[gestureTestIndex])"
+        gestureTestPrompt.isHidden = !hasGestureTestStarted
+        gestureTestPromptDirectionsLabel.isHidden = !hasGestureTestStarted
+        // Test UI: Start Gesture Test A
+        startGestureTestButton_A.isHidden = hasGestureTestStarted
+        startGestureTestButton_A.alpha = CGFloat(isConnected ? 1 : 0.4)
+        startGestureTestButton_A.isEnabled = isConnected
+        // Test UI: Start Gesture Test B
+        startGestureTestButton_B.isHidden = hasGestureTestStarted
+        startGestureTestButton_B.alpha = CGFloat(isConnected ? 1 : 0.4)
+        startGestureTestButton_B.isEnabled = isConnected
         
-        startTestAButton.isEnabled = isConnected
-        startTestBButton.alpha = CGFloat(isConnected ? 1 : 0.4)
-        startTestBButton.isEnabled = isConnected
-        startTestAButton.alpha = CGFloat(isConnected ? 1 : 0.4)
-        
+        // Top-Left Logging UI
         loggingButton.isEnabled = isConnected
         loggingButton.alpha = CGFloat(isConnected ? 1 : 0.7)
+        
+        // Top-Right Tutorial UI
         showTutorialButton.isEnabled = isConnected
         showTutorialButton.alpha = CGFloat(isConnected ? 1 : 0.7)
-        gesturePrompt.adjustsFontSizeToFitWidth = true
-        gesturePrompt.text = "(\(gestureIndex + 1)/\(gestureSequence.count)): \(gestureSequence[gestureIndex])"
+
     }
     
     @IBAction func connectButtonTapped(_ sender: Any) {
@@ -82,44 +94,61 @@ class ViewController: UIViewController {
     }
     
     @IBAction func startTestATapped(_ sender: Any) {
-        testStarted = true
-        testType = "A"
-        gestureSequence = ["Scratch"]
-            // ["Scratch", "Cover", "Force Touch", "Force Touch", "Cover", "Brush In", "Double Tap", "Scratch", "Brush In", "Brush Out","Scratch", "Double Tap"]
+        hasGestureTestStarted = true
+        gestureTestType = "A"
+        gestureTestSequence = ["Force Touch", "Brush In", "Scratch", "Cover", "Force Touch", "Double Tap", "Brush In", "Double Tap", "Brush Out", "Scratch", "Cover", "Brush In", "Brush Out", "Double Tap", "Force Touch", "Cover", "Scratch", "Brush Out"]
         updateUI(isConnected: true)
     }
     
     @IBAction func startTestBTapped(_ sender: Any) {
-        testStarted = true
-        testType = "B"
-        gestureSequence = ["Brush In","Brush In","Brush In", "Scratch","Scratch","Scratch","Brush Out","Brush Out","Brush Out","Cover","Cover","Cover","Force Touch","Force Touch","Force Touch","Double Tap","Double Tap","Double Tap"]
+        hasGestureTestStarted = true
+        gestureTestType = "B"
+        gestureTestSequence = ["Brush Out", "Cover", "Scratch", "Brush In", "Double Tap", "Brush In", "Cover", "Brush Out", "Scratch", "Force Touch", "Brush Out", "Force Touch", "Double Tap", "Scratch", "Force Touch", "Double Tap", "Brush In", "Cover"]
         updateUI(isConnected: true)
     }
     
     
     @IBAction func showTutorial(_ sender: Any) {
-        showTutorialHelper(gestureName: "Force Touch", gestureFileVideo: "forceTouch2")
+        gestureTutorialHelper()
     }
     
-    public func showTutorialHelper(gestureName: String, gestureFileVideo: String) {
-        teachingGesture = gestureName
+    public func gestureTutorialHelper() {
+        tutorialGestureRepeatCounter += 1
+        if (tutorialGestureRepeatCounter == tutorialGestureRepeats + 1) {
+            // reset repeats to zero and advance to next gesture
+            tutorialGestureRepeatCounter = 1
+            tutorialSequenceIndex += 1
+            // if no more gestures, reset index to 0 for next call to show tutorials
+            if (tutorialSequenceIndex == tutorialNameSequence.count) {
+                tutorialSequenceIndex = 0
+                return
+            }
+        }
+        // update gesture being taught, specifically the name and the video file
+        currentGestureInTutorial = tutorialNameSequence[tutorialSequenceIndex]
+        let gestureFileVideo = tutorialFileSequence[tutorialSequenceIndex]
+        
+        // retrieve video file to construct video player with
         guard let path = Bundle.main.path(forResource: gestureFileVideo, ofType:"mp4") else {
             debugPrint("\(gestureFileVideo).mp4 not found")
             return
         }
         let player = AVPlayer(url: URL(fileURLWithPath: path))
-        let gestureDirections = UILabel(frame: CGRect(x: 0, y: 40, width: playerController.view.frame.size.width, height: 50))
+        tutorialPlayerController.player = player
+        tutorialPlayerController.showsPlaybackControls = false
         
-        playerController.player = player
-        playerController.showsPlaybackControls = false
-        gestureDirections.text = "\(gestureName): Try It Now!"
+        // create overlay of directions for gesture tutorial
+        let gestureDirections = UILabel(frame: CGRect(x: 0, y: 40, width: tutorialPlayerController.view.frame.size.width, height: 50))
+        gestureDirections.text = "\(currentGestureInTutorial): Try It Now!"
         gestureDirections.textColor = .white
         gestureDirections.textAlignment = .center
         
-        playerController.contentOverlayView?.subviews.forEach { $0.removeFromSuperview() }
-        playerController.contentOverlayView?.addSubview(gestureDirections)
+        // remove artifacts from video overlay and add updated directions overlay
+        tutorialPlayerController.contentOverlayView?.subviews.forEach { $0.removeFromSuperview() }
+        tutorialPlayerController.contentOverlayView?.addSubview(gestureDirections)
         
-        present(playerController, animated: true) {
+        // present the video tutorial
+        present(tutorialPlayerController, animated: true) {
             player.play()
             // looping until forcetouch gesture delegate dismisses video tutorial
             NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { notification in
@@ -129,43 +158,47 @@ class ViewController: UIViewController {
         }
     }
     
-    public func advanceGesturePrompt() {
-        print("----")
-        gestureErrors = 0
-        gestureIndex += 1
-        if gestureIndex < gestureSequence.count {
-            gesturePrompt.text = "(\(gestureIndex + 1)/\(gestureSequence.count)): \(gestureSequence[gestureIndex])"
-        } else {
-            self.emailCSV(csvText: gestureCSVText, emailSubject: "Gestures Intended vs Detected: \(testType)")
-            gestureCSVText = ""
-            gestureIndex = 0
-            gestureErrors = 0
-            testStarted = false
-            testType = ""
-            updateUI(isConnected: true)
-        }
-        
-
-    }
-    
-    public func gestureInputCheck(gestureName: String) {
-        if !testStarted || playerController.isFirstResponder || gestureIndex >= gestureSequence.count {
+    public func gestureTestInputCheck(gestureName: String) {
+        // exit if (1) a user test hasn't started, (2) a tutorial is being displayed, or (3) we have no gestures left to prompt for
+        if !hasGestureTestStarted || tutorialPlayerController.isFirstResponder || gestureTestIndex >= gestureTestSequence.count {
             return
         }
-        gestureCSVText.append("\(gestureSequence[gestureIndex]),\(gestureName)\n")
-        if gestureName == gestureSequence[gestureIndex] {
+        // add the intended gesture, then gesture detected to the csv
+        gestureTestCSVText.append("\(gestureTestSequence[gestureTestIndex]),\(gestureName)\n")
+        if gestureName == gestureTestSequence[gestureTestIndex] {
+            // if these match, successfully proceed to next gesture prompt
+
             print("success!")
-            advanceGesturePrompt()
+            advanceGestureTestPrompt()
         } else {
+            // if a gesture other than the intended gesture was detected, the user is given a total of 5 chances before moving on to the next gesture
             print("error!")
-            gestureErrors += 1
+            gestureTestMismatchErrors += 1
             
-            if gestureErrors == 5 {
-                advanceGesturePrompt()
+            if gestureTestMismatchErrors == gestureTestMismatchLimit {
+                advanceGestureTestPrompt()
             }
         }
     }
     
+    public func advanceGestureTestPrompt() {
+        // proceed to next gesture to prompt for
+        print("----")
+        gestureTestMismatchErrors = 0
+        gestureTestIndex += 1
+        if gestureTestIndex < gestureTestSequence.count {
+            gestureTestPrompt.text = "(\(gestureTestIndex + 1)/\(gestureTestSequence.count)): \(gestureTestSequence[gestureTestIndex])"
+        } else {
+            // if all gestures have been prompted for then display email window with data as csv
+            self.emailCSV(csvText: gestureTestCSVText, emailSubject: "Gestures Intended vs Detected: \(gestureTestType)")
+            gestureTestCSVText = ""
+            gestureTestIndex = 0
+            gestureTestMismatchErrors = 0
+            hasGestureTestStarted = false
+            gestureTestType = ""
+            updateUI(isConnected: true)
+        }
+    }
     
     
 }
@@ -179,35 +212,35 @@ extension ViewController: JacquardServiceDelegate {
     func didDetectDoubleTapGesture() {
         lastGestureLabel.text = "Double Tap"
         print("Double Tap")
-        gestureInputCheck(gestureName: "Double Tap")
+        gestureTestInputCheck(gestureName: "Double Tap")
     }
     
     func didDetectBrushInGesture() {
         lastGestureLabel.text = "Brush In"
         print("Brush In")
-        gestureInputCheck(gestureName: "Brush In")
+        gestureTestInputCheck(gestureName: "Brush In")
     }
     
     func didDetectBrushOutGesture() {
         lastGestureLabel.text = "Brush Out"
         print("Brush Out")
-        gestureInputCheck(gestureName: "Brush Out")
+        gestureTestInputCheck(gestureName: "Brush Out")
     }
     
     func didDetectCoverGesture() {
         print("Cover")
         lastGestureLabel.text = "Cover"
-        gestureInputCheck(gestureName: "Cover")
+        gestureTestInputCheck(gestureName: "Cover")
     }
     
     func didDetectScratchGesture() {
         print("Scratch")
         lastGestureLabel.text = "Scratch"
-        gestureInputCheck(gestureName: "Scratch")
+        gestureTestInputCheck(gestureName: "Scratch")
         
-        if playerController.isFirstResponder && teachingGesture == "Scratch" {
-            print("Dismissing AV Controller")
-            playerController.dismiss(animated: true, completion: nil)
+        if tutorialPlayerController.isFirstResponder && currentGestureInTutorial == "Scratch" {
+            tutorialPlayerController.dismiss(animated: true, completion: nil)
+            gestureTutorialHelper()
         }
     }
     
@@ -220,12 +253,11 @@ extension ViewController: JacquardServiceDelegate {
     func didDetectForceTouchGesture() {
         print("Force Touch")
         lastGestureLabel.text = "Force Touch"
-        gestureInputCheck(gestureName: "Force Touch")
+        gestureTestInputCheck(gestureName: "Force Touch")
         
-        if playerController.isFirstResponder && teachingGesture == "Force Touch" {
-            print("Dismissing AV Controller")
-            playerController.dismiss(animated: true, completion: nil)
-            showTutorialHelper(gestureName: "Scratch", gestureFileVideo: "scratch")
+        if tutorialPlayerController.isFirstResponder && currentGestureInTutorial == "Force Touch" {
+            tutorialPlayerController.dismiss(animated: true, completion: nil)
+            gestureTutorialHelper()
         }
     }
     

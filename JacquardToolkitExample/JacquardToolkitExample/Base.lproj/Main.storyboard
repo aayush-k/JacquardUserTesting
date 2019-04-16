@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -15,7 +11,7 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="JacquardToolkitExample" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vDg-sb-KPw">
@@ -160,13 +156,13 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="gesturePrompt" destination="R0W-x5-LJ2" id="OGB-vp-peS"/>
-                        <outlet property="gesturePromptDirectionsLabel" destination="2Ga-Qj-V7k" id="t8r-OF-h2Q"/>
+                        <outlet property="gestureTestPrompt" destination="R0W-x5-LJ2" id="OGB-vp-peS"/>
+                        <outlet property="gestureTestPromptDirectionsLabel" destination="2Ga-Qj-V7k" id="t8r-OF-h2Q"/>
                         <outlet property="lastGestureLabel" destination="s7u-u3-kgS" id="eEM-To-pkO"/>
                         <outlet property="loggingButton" destination="g11-7D-kIR" id="hPJ-nF-tIw"/>
                         <outlet property="showTutorialButton" destination="Rby-6B-K51" id="hAD-Q8-Bkb"/>
-                        <outlet property="startTestAButton" destination="4qD-xD-3E0" id="CCq-QD-Bkf"/>
-                        <outlet property="startTestBButton" destination="faC-q9-0Qk" id="G2e-1B-CmW"/>
+                        <outlet property="startGestureTestButton_A" destination="4qD-xD-3E0" id="CCq-QD-Bkf"/>
+                        <outlet property="startGestureTestButton_B" destination="faC-q9-0Qk" id="G2e-1B-CmW"/>
                         <outletCollection property="threads" destination="RHM-HZ-JCn" collectionClass="NSMutableArray" id="rh9-Eq-dcw"/>
                         <outletCollection property="threads" destination="0JA-hX-zuw" collectionClass="NSMutableArray" id="OEq-Ya-lUX"/>
                         <outletCollection property="threads" destination="xOB-vQ-hIu" collectionClass="NSMutableArray" id="CAA-0z-F0n"/>
