@@ -42,7 +42,9 @@ class ViewController: UIViewController {
     private var tutorialSequenceIndex = 0
     private let tutorialGestureRepeats = 3
     private let tutorialNameSequence = ["Force Touch", "Scratch"]
+    private let tutorialExplanationSequence = ["Press lightly, then firmly", "Swipe the cuff back and forth 2 times"]
     private let tutorialFileSequence = ["forceTouch2", "scratch"]
+    private var hasWatchedTutorialGestureOnce = true
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -109,10 +111,18 @@ class ViewController: UIViewController {
     
     
     @IBAction func showTutorial(_ sender: Any) {
-        gestureTutorialHelper()
+        advanceGestureTutorial()
     }
     
-    public func gestureTutorialHelper() {
+    public func gestureTutorialInputCheck(gestureName: String) {
+        if tutorialPlayerController.isFirstResponder && currentGestureInTutorial == gestureName && hasWatchedTutorialGestureOnce{
+            tutorialPlayerController.dismiss(animated: true, completion: nil)
+            advanceGestureTutorial()
+        }
+    }
+    
+    public func advanceGestureTutorial() {
+
         tutorialGestureRepeatCounter += 1
         if (tutorialGestureRepeatCounter == tutorialGestureRepeats + 1) {
             // reset repeats to zero and advance to next gesture
@@ -127,6 +137,7 @@ class ViewController: UIViewController {
         // update gesture being taught, specifically the name and the video file
         currentGestureInTutorial = tutorialNameSequence[tutorialSequenceIndex]
         let gestureFileVideo = tutorialFileSequence[tutorialSequenceIndex]
+        let gestureExplanation = tutorialExplanationSequence[tutorialSequenceIndex]
         
         // retrieve video file to construct video player with
         guard let path = Bundle.main.path(forResource: gestureFileVideo, ofType:"mp4") else {
@@ -138,20 +149,28 @@ class ViewController: UIViewController {
         tutorialPlayerController.showsPlaybackControls = false
         
         // create overlay of directions for gesture tutorial
-        let gestureDirections = UILabel(frame: CGRect(x: 0, y: 40, width: tutorialPlayerController.view.frame.size.width, height: 50))
-        gestureDirections.text = "\(currentGestureInTutorial): Try It Now!"
-        gestureDirections.textColor = .white
-        gestureDirections.textAlignment = .center
-        
+        let gestureNameLabel = createOverlaidLabelHelper(yOffset: 40, fontSize: 40, text: currentGestureInTutorial)
+        let gestureDirectionsLabel = createOverlaidLabelHelper(yOffset: 80, fontSize: 20, text: gestureExplanation)
+//        let gesturePromptLabelFirst = createOverlaidLabelHelper(yOffset: 700, fontSize: 15, text: "After watching the full gesture once,")
+        let gesturePromptLabel = createOverlaidLabelHelper(yOffset: 750, fontSize: 25, text: "Try it!")
+
         // remove artifacts from video overlay and add updated directions overlay
         tutorialPlayerController.contentOverlayView?.subviews.forEach { $0.removeFromSuperview() }
-        tutorialPlayerController.contentOverlayView?.addSubview(gestureDirections)
+        tutorialPlayerController.contentOverlayView?.addSubview(gestureNameLabel)
+        tutorialPlayerController.contentOverlayView?.addSubview(gestureDirectionsLabel)
+//        tutorialPlayerController.contentOverlayView?.addSubview(gesturePromptLabelFirst)
+        tutorialPlayerController.contentOverlayView?.addSubview(gesturePromptLabel)
+        gesturePromptLabel.isHidden = true
         
+
         // present the video tutorial
+        hasWatchedTutorialGestureOnce = false
         present(tutorialPlayerController, animated: true) {
             player.play()
             // looping until forcetouch gesture delegate dismisses video tutorial
             NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { notification in
+                self.hasWatchedTutorialGestureOnce = true
+                gesturePromptLabel.isHidden = false
                 player.seek(to: CMTime.zero)
                 player.play()
             }
@@ -169,19 +188,19 @@ class ViewController: UIViewController {
             // if these match, successfully proceed to next gesture prompt
 
             print("success!")
-            advanceGestureTestPrompt()
+            advanceGestureTest()
         } else {
             // if a gesture other than the intended gesture was detected, the user is given a total of 5 chances before moving on to the next gesture
             print("error!")
             gestureTestMismatchErrors += 1
             
             if gestureTestMismatchErrors == gestureTestMismatchLimit {
-                advanceGestureTestPrompt()
+                advanceGestureTest()
             }
         }
     }
     
-    public func advanceGestureTestPrompt() {
+    public func advanceGestureTest() {
         // proceed to next gesture to prompt for
         print("----")
         gestureTestMismatchErrors = 0
@@ -200,6 +219,17 @@ class ViewController: UIViewController {
         }
     }
     
+    public func createOverlaidLabelHelper(yOffset: CGFloat, fontSize: CGFloat, text: String) -> UILabel {
+        let label = UILabel(frame: CGRect(x: 0, y: yOffset, width: tutorialPlayerController.view.frame.size.width, height: 50))
+        label.text = text
+        label.textColor = .white
+        label.textAlignment = .center
+        label.numberOfLines = 5
+        label.lineBreakMode = .byWordWrapping
+        label.font = label.font.withSize(fontSize)
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        return label
+    }
     
 }
 
@@ -237,11 +267,7 @@ extension ViewController: JacquardServiceDelegate {
         print("Scratch")
         lastGestureLabel.text = "Scratch"
         gestureTestInputCheck(gestureName: "Scratch")
-        
-        if tutorialPlayerController.isFirstResponder && currentGestureInTutorial == "Scratch" {
-            tutorialPlayerController.dismiss(animated: true, completion: nil)
-            gestureTutorialHelper()
-        }
+        gestureTutorialInputCheck(gestureName: "Scratch")
     }
     
     func didDetectThreadTouch(threadArray: [Float]) {
@@ -254,11 +280,7 @@ extension ViewController: JacquardServiceDelegate {
         print("Force Touch")
         lastGestureLabel.text = "Force Touch"
         gestureTestInputCheck(gestureName: "Force Touch")
-        
-        if tutorialPlayerController.isFirstResponder && currentGestureInTutorial == "Force Touch" {
-            tutorialPlayerController.dismiss(animated: true, completion: nil)
-            gestureTutorialHelper()
-        }
+        gestureTutorialInputCheck(gestureName: "Force Touch")
     }
     
 }
