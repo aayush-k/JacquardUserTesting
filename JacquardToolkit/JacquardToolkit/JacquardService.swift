@@ -45,8 +45,8 @@ public class JacquardService: NSObject, CBCentralManagerDelegate {
     private var forceTouchTurnedEnabled = true
     // forcetouch detection
     private var forceTouchDetectionProgress = 0
-    private var forceTouchDetectionLength = 6
-    private var forceTouchDetectionThreshold = 0.9
+    private var forceTouchDetectionLength = 20
+    private var forceTouchDetectionThreshold = 0.90
     // forcetouch detection cooldown
     private var forceTouchCooldownProgress = 0
     private var minForceTouchCooldownLength = 6

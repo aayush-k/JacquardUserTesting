@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     private let tutorialGestureRepeats = 3
     private let tutorialNameSequence = ["Force Touch", "Scratch"]
     private let tutorialExplanationSequence = ["Press lightly, then firmly", "Swipe the cuff back and forth 2 times"]
-    private let tutorialFileSequence = ["forceTouch2", "scratch"]
+    private let tutorialFileSequence = ["forcetouch3", "scratch"]
     private var hasWatchedTutorialGestureOnce = true
     
     override public func viewDidLoad() {
