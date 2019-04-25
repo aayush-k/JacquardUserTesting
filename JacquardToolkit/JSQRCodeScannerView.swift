@@ -17,7 +17,7 @@ public class JSQRCodeScannerView: UIView {
     private var scannerBounds = CAShapeLayer()
     private var textLayer = CATextLayer()
     private var scannerRect = CGRect()
-
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         

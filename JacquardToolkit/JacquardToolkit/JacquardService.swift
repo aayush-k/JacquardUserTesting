@@ -13,6 +13,7 @@ import NotificationCenter
 import AVFoundation
 
 @objc public protocol JacquardServiceDelegate: NSObjectProtocol {
+    @objc optional func didDetectConnection(isConnected: Bool)
     @objc optional func didDetectDoubleTapGesture()
     @objc optional func didDetectBrushInGesture()
     @objc optional func didDetectBrushOutGesture()
@@ -50,6 +51,10 @@ public class JacquardService: NSObject, CBCentralManagerDelegate {
     private var forceTouchCooldownProgress = 0
     private var minForceTouchCooldownLength = 6
     private var forceTouchCooldownThreshold = 0.4
+    
+    // csv logging
+    private var csvText = ""
+    public var loggingThreads = false
 
     private override init() {
         super.init()
@@ -154,7 +159,18 @@ public class JacquardService: NSObject, CBCentralManagerDelegate {
     }
 
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        delegate?.didDetectConnection!(isConnected: true)
         peripheral.discoverServices(nil)
+    }
+    
+    public func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        delegate?.didDetectConnection!(isConnected: false)
+    }
+    
+    public func exportLog() -> String {
+        let csvTextStore = csvText
+        csvText.removeAll()
+        return csvTextStore
     }
 
 }
@@ -202,6 +218,11 @@ extension JacquardService: CBPeripheralDelegate {
                 let threadForceValueArray = JSHelper.shared.findThread(from: characteristic)
                 delegate?.didDetectThreadTouch?(threadArray: threadForceValueArray)
                 checkForForceTouch(threadReadings: threadForceValueArray)
+                
+                if self.loggingThreads {
+                    let strArray = threadForceValueArray.map { String($0) }
+                    csvText.append("\(strArray.joined(separator:",")),\n")
+                }
             }
         }
     }
