@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		450D42B82272438A00A9820E /* scratch.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 450D42B72272438A00A9820E /* scratch.mp4 */; };
 		450D42BA227250B600A9820E /* forcetouch3.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 450D42B9227250B600A9820E /* forcetouch3.mp4 */; };
+		450D42BC2273E63700A9820E /* gtlogo2.png in Resources */ = {isa = PBXBuildFile; fileRef = 450D42BB2273E63600A9820E /* gtlogo2.png */; };
 		4FE3066B0101F921D47E40DD /* Pods_JacquardToolkitExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDD877E47F75A4D1CEC368C2 /* Pods_JacquardToolkitExample.framework */; };
 		8288E20721AD9B3400F03ACC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8288E20621AD9B3400F03ACC /* AppDelegate.swift */; };
 		8288E20921AD9B3400F03ACC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8288E20821AD9B3400F03ACC /* ViewController.swift */; };
@@ -21,6 +22,7 @@
 		02B7479AF6060907362D077A /* Pods-JacquardToolkitExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JacquardToolkitExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JacquardToolkitExample/Pods-JacquardToolkitExample.debug.xcconfig"; sourceTree = "<group>"; };
 		450D42B72272438A00A9820E /* scratch.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = scratch.mp4; sourceTree = "<group>"; };
 		450D42B9227250B600A9820E /* forcetouch3.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = forcetouch3.mp4; sourceTree = "<group>"; };
+		450D42BB2273E63600A9820E /* gtlogo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gtlogo2.png; sourceTree = "<group>"; };
 		8288E20321AD9B3300F03ACC /* JacquardToolkitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JacquardToolkitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8288E20621AD9B3400F03ACC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8288E20821AD9B3400F03ACC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				8288E20D21AD9B3600F03ACC /* Assets.xcassets */,
 				8288E20F21AD9B3600F03ACC /* LaunchScreen.storyboard */,
 				8288E21221AD9B3600F03ACC /* Info.plist */,
+				450D42BB2273E63600A9820E /* gtlogo2.png */,
 			);
 			path = JacquardToolkitExample;
 			sourceTree = "<group>";
@@ -157,6 +160,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				450D42BC2273E63700A9820E /* gtlogo2.png in Resources */,
 				8288E21121AD9B3600F03ACC /* LaunchScreen.storyboard in Resources */,
 				450D42BA227250B600A9820E /* forcetouch3.mp4 in Resources */,
 				8288E20E21AD9B3600F03ACC /* Assets.xcassets in Resources */,
