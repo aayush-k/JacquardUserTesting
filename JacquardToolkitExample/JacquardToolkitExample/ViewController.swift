@@ -45,6 +45,9 @@ class ViewController: UIViewController {
     private let tutorialFileSequence = ["forcetouch3", "scratch"]
     private var hasWatchedTutorialGestureOnce = true
     
+    
+    let formatter = DateFormatter()
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         JacquardService.shared.delegate = self
@@ -52,7 +55,9 @@ class ViewController: UIViewController {
             thread.alpha = CGFloat(0.05)
         }
         updateUI(isConnected: false)
-        connect()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+//        connect()
     }
     
     public func updateUI(isConnected: Bool) {
@@ -192,7 +197,9 @@ class ViewController: UIViewController {
             return
         }
         // add the intended gesture, then gesture detected to the csv
-        gestureTestCSVText.append("\(gestureTestSequence[gestureTestIndex]),\(gestureName)\n")
+        let temp = "\(formatter.string(from: Date())),\(gestureTestSequence[gestureTestIndex]),\(gestureName)\n"
+        print(temp)
+        gestureTestCSVText.append(temp)
         if gestureName == gestureTestSequence[gestureTestIndex] {
             // if these match, successfully proceed to next gesture prompt
             print("success!")

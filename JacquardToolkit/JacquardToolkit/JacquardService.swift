@@ -45,12 +45,16 @@ public class JacquardService: NSObject, CBCentralManagerDelegate {
     private var forceTouchTurnedEnabled = true
     // forcetouch detection
     private var forceTouchDetectionProgress = 0
-    private var forceTouchDetectionLength = 20
+    private var forceTouchDetectionLength = 16
+    
     private var forceTouchDetectionThreshold = 0.90
     // forcetouch detection cooldown
     private var forceTouchCooldownProgress = 0
     private var minForceTouchCooldownLength = 6
     private var forceTouchCooldownThreshold = 0.4
+    
+    private var mostRecentGesture: JSConstants.JSGestures = .undefined
+    private var cachingGoogleGestures = false
     
     // csv logging
     private var csvText = ""
@@ -231,19 +235,24 @@ extension JacquardService: CBPeripheralDelegate {
         if let userInfo = userInfo.userInfo {
             if let characteristic = userInfo["characteristic"] as? CBCharacteristic, forceTouchTurnedEnabled {
                 let gesture = JSHelper.shared.gestureConverter(from: characteristic)
-                switch gesture {
-                case .doubleTap:
-                    delegate?.didDetectDoubleTapGesture?()
-                case .brushIn:
-                    delegate?.didDetectBrushInGesture?()
-                case .brushOut:
-                    delegate?.didDetectBrushOutGesture?()
-                case .cover:
-                    delegate?.didDetectCoverGesture?()
-                case .scratch:
-                    delegate?.didDetectScratchGesture?()
-                default:
-                    NSLog("Detected an unknown gesture with characteristic: \(characteristic.uuid.uuidString)")
+                if cachingGoogleGestures {
+                    mostRecentGesture = gesture
+                    print("cached \(mostRecentGesture)")
+                } else {
+                    switch gesture {
+                    case .doubleTap:
+                        delegate?.didDetectDoubleTapGesture?()
+                    case .brushIn:
+                        delegate?.didDetectBrushInGesture?()
+                    case .brushOut:
+                        delegate?.didDetectBrushOutGesture?()
+                    case .cover:
+                        delegate?.didDetectCoverGesture?()
+                    case .scratch:
+                        delegate?.didDetectScratchGesture?()
+                    default:
+                        NSLog("Detected an unknown gesture with characteristic: \(characteristic.uuid.uuidString)")
+                    }
                 }
             }
         }
@@ -267,16 +276,52 @@ extension JacquardService: CBPeripheralDelegate {
 
         if forceTouchTurnedEnabled {
             if let prediction = prediction?.output[JSConstants.JSStrings.ForceTouch.outputLabel], prediction > forceTouchDetectionThreshold {
+                
+                if forceTouchDetectionProgress == 0 {
+                    // point A
+                    print("point A")
+                    cachingGoogleGestures = true
+                }
+                
                 // increment detection progress with each sufficiently high prediction confidence
                 forceTouchDetectionProgress += 1
                 // if enough detection progress has elapsed, register a detection of ForceTouch and reset
                 if forceTouchDetectionProgress >= forceTouchDetectionLength {
+                    // point C
+                    print("point C")
                     forceTouchDetectionProgress = 0
                     forceTouchTurnedEnabled = false
+                    cachingGoogleGestures = false
+                    mostRecentGesture = .undefined
                     delegate?.didDetectForceTouchGesture?()
                 }
                 
             } else {
+                if forceTouchDetectionProgress > 0 {
+                    // did not complete all n timesteps
+                    // point B
+                    print("point B")
+                    //  take the most recently cached official gesture
+                    switch mostRecentGesture {
+                    case .doubleTap:
+                        delegate?.didDetectDoubleTapGesture?()
+                    case .brushIn:
+                        delegate?.didDetectBrushInGesture?()
+                    case .brushOut:
+                        delegate?.didDetectBrushOutGesture?()
+                    case .cover:
+                        delegate?.didDetectCoverGesture?()
+                    case .scratch:
+                        delegate?.didDetectScratchGesture?()
+                    default:
+                        print("default placeholder")
+//                        NSLog("Detected an unknown gesture with characteristic: \(characteristic.uuid.uuidString)")
+                    }
+                    cachingGoogleGestures = false
+                    mostRecentGesture = .undefined
+                    
+                }
+                
                 forceTouchDetectionProgress = 0
             }
         } else {
